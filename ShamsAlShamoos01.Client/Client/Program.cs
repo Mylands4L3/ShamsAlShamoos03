@@ -20,6 +20,8 @@ var licenseKey = "MTU4NUAzMjM3MkUzMTJFMzluT08wbzRnYm4zUlFDOVRzWVpYbUtuSEl0aUhTZm
 SyncfusionLicenseProvider.RegisterLicense(licenseKey);
 
  
+
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -30,9 +32,8 @@ builder.Services.AddScoped<HistoryRegisterService>();
 // رجیستر Syncfusion
 builder.Services.AddSyncfusionBlazor();
 
+
  
-
-
 
 
 
