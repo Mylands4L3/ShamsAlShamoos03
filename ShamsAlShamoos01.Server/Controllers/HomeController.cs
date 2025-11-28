@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ShamsAlShamoos01.Server.Controllers
 {
-
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         [AllowAnonymous]

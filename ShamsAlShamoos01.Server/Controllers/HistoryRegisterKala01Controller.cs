@@ -105,64 +105,125 @@ namespace ShamsAlShamoos01.Server.Controllers
             }
         }
 
-        private static string BuildRoleBasedWhereClause(List<string> userRoles, string baseCondition,
-            string unitCondition, string regUnitCondition, string status01P)
+        private static string BuildRoleBasedWhereClause(
+            List<string> userRoles,
+            string baseCondition,
+            string unitCondition,
+            string regUnitCondition,
+            string status01P)
         {
             bool isPass = status01P == "PassSignature01";
             bool isWait = status01P == "WaitForSignature01";
             bool notClear = status01P == "NotCleare01";
 
+            /* ---------------------------------------------------------
+             *  سطح اول – نقش YEGAN
+             * --------------------------------------------------------- */
             if (userRoles.Contains("HistoryRegisterKalaYEGAN"))
             {
+                // نقش امضای دوم
                 if (userRoles.Contains("StatusHistoryRegisterKalaConfirmation02"))
                 {
-                    if (isPass) return $"{regUnitCondition} AND StatusConfirmation02 = 320";
-                    if (isWait) return $"{regUnitCondition} AND StatusConfirmation02 = 319";
+                    if (isPass)
+                    {
+                        return $"{regUnitCondition} AND StatusConfirmation02 = 320";
+                    }
+
+                    if (isWait)
+                    {
+                        return $"{regUnitCondition} AND StatusConfirmation02 = 319";
+                    }
                 }
 
+                // نقش امضای سوم
                 if (userRoles.Contains("StatusHistoryRegisterKalaConfirmation03"))
                 {
-                    if (isPass) return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
-                    if (notClear) return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 321";
-                    if (isWait) return $"StatusConfirmation02 = 320 AND StatusConfirmation03 = 319 {regUnitCondition}";
+                    if (isPass)
+                    {
+                        return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
+                    }
+
+                    if (notClear)
+                    {
+                        return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 321";
+                    }
+
+                    if (isWait)
+                    {
+                        return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 319";
+                    }
                 }
 
-                if (!userRoles.Contains("StatusHistoryRegisterKalaConfirmation02,StatusHistoryRegisterKalaConfirmation03"))
+                // اگر هیچ‌کدام از نقش‌های امضا ۲ و ۳ نبود
+                if (!userRoles.Contains("StatusHistoryRegisterKalaConfirmation02") &&
+                    !userRoles.Contains("StatusHistoryRegisterKalaConfirmation03"))
                 {
                     return $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
                 }
             }
 
+            /* ---------------------------------------------------------
+             *  سطح دوم – نقش YEGAN00
+             * --------------------------------------------------------- */
             if (userRoles.Contains("HistoryRegisterKalaYEGAN00"))
             {
+                // امضا ۲
                 if (userRoles.Contains("StatusHistoryRegisterKalaConfirmation02"))
                 {
-                    if (isPass) return $"{baseCondition} AND StatusConfirmation02 = 320";
-                    if (isWait) return $"{baseCondition} AND StatusConfirmation02 = 319";
+                    if (isPass)
+                    {
+                        return $"{baseCondition} AND StatusConfirmation02 = 320";
+                    }
+
+                    if (isWait)
+                    {
+                        return $"{baseCondition} AND StatusConfirmation02 = 319";
+                    }
                 }
 
+                // امضا ۳
                 if (userRoles.Contains("StatusHistoryRegisterKalaConfirmation03"))
                 {
-                    if (isPass) return $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
-                    if (isWait) return $"StatusConfirmation02 = 320 AND StatusConfirmation03 = 319 {unitCondition}";
+                    if (isPass)
+                    {
+                        return $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
+                    }
+
+                    if (isWait)
+                    {
+                        return $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 319";
+                    }
                 }
             }
 
-            if (userRoles.Contains("HistoryRegisterKalaALL") && status01P == "AllPassSignature01")
+            /* ---------------------------------------------------------
+             *  تاریخچه ALL
+             * --------------------------------------------------------- */
+            if (userRoles.Contains("HistoryRegisterKalaALL") &&
+                status01P == "AllPassSignature01")
             {
                 return $"{baseCondition} AND StatusConfirmation03 = 320";
             }
 
+            /* ---------------------------------------------------------
+             *  پایور
+             * --------------------------------------------------------- */
             if (userRoles.Contains("HistoryRegisterKalaPayvar"))
             {
-                return $"{baseCondition} AND StatusConfirmation03 = 320 AND TblLuLookupSubbId not in ('8','10','12','13')";
+                return $"{baseCondition} AND StatusConfirmation03 = 320 AND TblLuLookupSubbId NOT IN ('8','10','12','13')";
             }
 
+            /* ---------------------------------------------------------
+             *  وظیفه
+             * --------------------------------------------------------- */
             if (userRoles.Contains("HistoryRegisterKalaVazifeh"))
             {
-                return $"{baseCondition} AND StatusConfirmation03 = 320 AND TblLuLookupSubbId in ('8','10','12','13')";
+                return $"{baseCondition} AND StatusConfirmation03 = 320 AND TblLuLookupSubbId IN ('8','10','12','13')";
             }
 
+            /* ---------------------------------------------------------
+             *  پیش‌فرض – عدم دسترسی
+             * --------------------------------------------------------- */
             return "1 = 0";
         }
 

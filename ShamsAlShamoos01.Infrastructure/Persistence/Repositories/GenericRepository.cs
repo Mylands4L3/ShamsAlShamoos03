@@ -18,18 +18,27 @@ namespace ShamsAlShamoos01.Infrastructure.Persistence.Repositories
             _table = _context.Set<T>();
         }
 
-        public void Create(T entity) => _table.Add(entity);
+        // CREATE
+        public void Create(T entity)
+        {
+            _table.Add(entity);
+        }
 
+        // UPDATE
         public void Update(T entity)
         {
             _table.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
         }
 
+        // DELETE
         public void Delete(T entity)
         {
             if (_context.Entry(entity).State == EntityState.Detached)
+            {
                 _table.Attach(entity);
+            }
+
             _table.Remove(entity);
         }
 
@@ -37,28 +46,47 @@ namespace ShamsAlShamoos01.Infrastructure.Persistence.Repositories
         {
             var entity = GetById(id);
             if (entity != null)
+            {
                 Delete(entity);
+            }
         }
 
-        public T GetById(object id) => _table.Find(id);
+        // GET BY ID
+        public T GetById(object id)
+        {
+            return _table.Find(id);
+        }
 
+        // GET ALL
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null)
         {
             IQueryable<T> query = _table;
+
             if (filter != null)
+            {
                 query = query.Where(filter);
+            }
+
             return query.ToList();
         }
 
+        // GET WITH ORDER & FILTER
         public IEnumerable<T> Get(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
         {
             IQueryable<T> query = _table;
+
             if (filter != null)
+            {
                 query = query.Where(filter);
+            }
+
             if (orderBy != null)
+            {
                 query = orderBy(query);
+            }
+
             return query.ToList();
         }
     }
