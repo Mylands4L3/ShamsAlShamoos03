@@ -105,7 +105,7 @@ namespace ShamsAlShamoos01.Server.Controllers
             }
         }
 
-        private static string BuildRoleBasedWhereClause(List<string> userRoles, string baseCondition, 
+        private static string BuildRoleBasedWhereClause(List<string> userRoles, string baseCondition,
             string unitCondition, string regUnitCondition, string status01P)
         {
             bool isPass = status01P == "PassSignature01";
@@ -269,7 +269,7 @@ namespace ShamsAlShamoos01.Server.Controllers
             }
         }
 
-        private static void UpdateEntityBasedOnRoles(HistoryRegisterKala01 entity, 
+        private static void UpdateEntityBasedOnRoles(HistoryRegisterKala01 entity,
             HistoryRegisterKala01ViewModel_Update viewModel, List<string> roles)
         {
             if (roles.Contains("StatusHistoryRegisterKalaConfirmation02"))
