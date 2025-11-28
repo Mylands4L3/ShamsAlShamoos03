@@ -125,19 +125,31 @@ namespace ShamsAlShamoos01.Server.Controllers
 
             // سطح YEGAN
             var yeganClause = BuildYeganClause(userRoles, unitCondition, regUnitCondition, isPass, isWait, notClear);
-            if (yeganClause != null) return yeganClause;
+            if (yeganClause != null)
+            {
+                return yeganClause;
+            }
 
             // سطح YEGAN00
             var yegan00Clause = BuildYegan00Clause(userRoles, baseCondition, unitCondition, isPass, isWait);
-            if (yegan00Clause != null) return yegan00Clause;
+            if (yegan00Clause != null)
+            {
+                return yegan00Clause;
+            }
 
             // تاریخچه ALL
             var allClause = BuildAllClause(userRoles, baseCondition, status01P);
-            if (allClause != null) return allClause;
+            if (allClause != null)
+            {
+                return allClause;
+            }
 
             // پایور و وظیفه
             var payvarOrVazifehClause = BuildPayvarOrVazifehClause(userRoles, baseCondition);
-            if (payvarOrVazifehClause != null) return payvarOrVazifehClause;
+            if (payvarOrVazifehClause != null)
+            {
+                return payvarOrVazifehClause;
+            }
 
             // پیش‌فرض
             return "1 = 0";
@@ -173,18 +185,35 @@ namespace ShamsAlShamoos01.Server.Controllers
 
         private static string BuildYegan00Clause(List<string> roles, string baseCondition, string unitCondition, bool isPass, bool isWait)
         {
-            if (!roles.Contains("HistoryRegisterKalaYEGAN00")) return null;
+            if (!roles.Contains("HistoryRegisterKalaYEGAN00"))
+            {
+                return null;
+            }
 
             if (roles.Contains("StatusHistoryRegisterKalaConfirmation02"))
             {
-                if (isPass) return $"{baseCondition} AND StatusConfirmation02 = 320";
-                if (isWait) return $"{baseCondition} AND StatusConfirmation02 = 319";
+                if (isPass)
+                {
+                    return $"{baseCondition} AND StatusConfirmation02 = 320";
+                }
+
+                if (isWait)
+                {
+                    return $"{baseCondition} AND StatusConfirmation02 = 319";
+                }
             }
 
             if (roles.Contains("StatusHistoryRegisterKalaConfirmation03"))
             {
-                if (isPass) return $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
-                if (isWait) return $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 319";
+                if (isPass)
+                {
+                    return $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
+                }
+
+                if (isWait)
+                {
+                    return $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 319";
+                }
             }
 
             return null;
@@ -193,9 +222,13 @@ namespace ShamsAlShamoos01.Server.Controllers
         private static string BuildAllClause(List<string> roles, string baseCondition, string status01P)
         {
             if (roles.Contains("HistoryRegisterKalaALL") && status01P == "AllPassSignature01")
+            {
                 return $"{baseCondition} AND StatusConfirmation03 = 320";
+            }
+
             return null;
         }
+
 
         private static string BuildPayvarOrVazifehClause(List<string> roles, string baseCondition)
         {
