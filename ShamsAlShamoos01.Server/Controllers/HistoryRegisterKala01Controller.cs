@@ -163,42 +163,27 @@ namespace ShamsAlShamoos01.Server.Controllers
             {
                 return null;
             }
+            string clause = null;
 
             if (roles.Contains("StatusHistoryRegisterKalaConfirmation02"))
             {
-                if (isPass)
-                {
-                    return $"{regUnitCondition} AND StatusConfirmation02 = 320";
-                }
-                else if (isWait)
-                {
-                    return $"{regUnitCondition} AND StatusConfirmation02 = 319";
-                }
+                clause = isPass ? $"{regUnitCondition} AND StatusConfirmation02 = 320" :
+                         isWait ? $"{regUnitCondition} AND StatusConfirmation02 = 319" : null;
             }
             else if (roles.Contains("StatusHistoryRegisterKalaConfirmation03"))
             {
-                if (isPass)
-                {
-                    return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
-                }
-                else if (notClear)
-                {
-                    return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 321";
-                }
-                else if (isWait)
-                {
-                    return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 319";
-                }
+                if (isPass) clause = $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
+                else if (notClear) clause = $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 321";
+                else if (isWait) clause = $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 319";
             }
 
-
-            if (!roles.Contains("StatusHistoryRegisterKalaConfirmation02") &&
-                !roles.Contains("StatusHistoryRegisterKalaConfirmation03"))
+            if (clause == null && !roles.Contains("StatusHistoryRegisterKalaConfirmation02") &&
+                               !roles.Contains("StatusHistoryRegisterKalaConfirmation03"))
             {
-                return $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
+                clause = $"{unitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
             }
 
-            return null;
+            return clause;
         }
 
         private static string BuildYegan00Clause(List<string> roles, string baseCondition, string unitCondition, bool isPass, bool isWait)
