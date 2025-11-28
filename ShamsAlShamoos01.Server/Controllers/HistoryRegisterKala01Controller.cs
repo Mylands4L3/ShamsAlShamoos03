@@ -29,7 +29,14 @@ namespace ShamsAlShamoos01.Server.Controllers
         private readonly APIDataService01 _dataService;
         private readonly PersianCalendar _persianCalendar = new();
 
-        public static List<HistoryRegisterKala01ViewModelcat> PersonellistDailyPlan01 = new();
+
+        private static readonly List<HistoryRegisterKala01ViewModelcat> _personellistDailyPlan01 = new();
+
+        public static IReadOnlyList<HistoryRegisterKala01ViewModelcat> PersonellistDailyPlan01 => _personellistDailyPlan01.AsReadOnly();
+
+
+
+
         public List<HistoryRegisterKala01ViewModelcat> _View_DailyPlanEvidence02 { get; set; }
 
         public string JsonSelectedMelliCode01
