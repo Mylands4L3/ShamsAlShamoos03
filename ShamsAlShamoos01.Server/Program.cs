@@ -9,7 +9,6 @@ using ShamsAlShamoos01.Server.Services;
 using ShamsAlShamoos01.Shared.Entities;
 using Syncfusion.Licensing;
 using System.Globalization;
-using System.Text.RegularExpressions;
 
 
 //فارسی کردن
@@ -18,23 +17,7 @@ CultureInfo.DefaultThreadCurrentCulture = culture;
 CultureInfo.DefaultThreadCurrentUICulture = culture;
 //فارسی کردن
 
-//if (File.Exists(Directory.GetCurrentDirectory() + "/SyncfusionLicense.txt"))
-//{
-//    string licenseKey = File.ReadAllText(Directory.GetCurrentDirectory() + "/SyncfusionLicense.txt").Trim();
-//    SyncfusionLicenseProvider.RegisterLicense(licenseKey);
-//    if (File.Exists(Directory.GetCurrentDirectory() + "/wwwroot/scripts/index.js"))
-//    {
-//        string regexPattern = "ej.base.registerLicense(.*);";
-//        string jsContent = File.ReadAllText(Directory.GetCurrentDirectory() + "/wwwroot/scripts/index.js");
-//        MatchCollection matchCases = Regex.Matches(jsContent, regexPattern);
-//        foreach (Match matchCase in matchCases)
-//        {
-//            var replaceableString = matchCase.ToString();
-//            jsContent = jsContent.Replace(replaceableString, "ej.base.registerLicense('" + licenseKey + "');");
-//        }
-//        File.WriteAllText(Directory.GetCurrentDirectory() + "/wwwroot/scripts/index.js", jsContent);
-//    }
-//}
+ 
 
 
 var licenseKey = "MTU4NUAzMjM3MkUzMTJFMzluT08wbzRnYm4zUlFDOVRzWVpYbUtuSEl0aUhTZmNMYjQxekhrV0NVRnlzPQ==";
@@ -96,21 +79,6 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 
-//using Microsoft.Extensions.FileProviders;
-
-//var qrFilesPath = Path.Combine(AppContext.BaseDirectory, "QrFiles");
-
-//if (!Directory.Exists(qrFilesPath))
-//    Directory.CreateDirectory(qrFilesPath);
-
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(qrFilesPath),
-//    RequestPath = "/QrFiles"
-//});
-
-
-//var qrFilesPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "QrFiles"));
 var qrFilesPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(),   "QrFiles"));
 
 if (!Directory.Exists(qrFilesPath))
