@@ -159,20 +159,26 @@ namespace ShamsAlShamoos01.Server.Controllers
 
         private static string BuildYeganClause(List<string> roles, string unitCondition, string regUnitCondition, bool isPass, bool isWait, bool notClear)
         {
-            if (!roles.Contains("HistoryRegisterKalaYEGAN")) return null;
+            if (!roles.Contains("HistoryRegisterKalaYEGAN"))
+                return null;
 
             if (roles.Contains("StatusHistoryRegisterKalaConfirmation02"))
             {
-                if (isPass) return $"{regUnitCondition} AND StatusConfirmation02 = 320";
-                if (isWait) return $"{regUnitCondition} AND StatusConfirmation02 = 319";
+                if (isPass)
+                    return $"{regUnitCondition} AND StatusConfirmation02 = 320";
+                else if (isWait)
+                    return $"{regUnitCondition} AND StatusConfirmation02 = 319";
+            }
+            else if (roles.Contains("StatusHistoryRegisterKalaConfirmation03"))
+            {
+                if (isPass)
+                    return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
+                else if (notClear)
+                    return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 321";
+                else if (isWait)
+                    return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 319";
             }
 
-            if (roles.Contains("StatusHistoryRegisterKalaConfirmation03"))
-            {
-                if (isPass) return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 320";
-                if (notClear) return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 321";
-                if (isWait) return $"{regUnitCondition} AND StatusConfirmation02 = 320 AND StatusConfirmation03 = 319";
-            }
 
             if (!roles.Contains("StatusHistoryRegisterKalaConfirmation02") &&
                 !roles.Contains("StatusHistoryRegisterKalaConfirmation03"))
