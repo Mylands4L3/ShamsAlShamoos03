@@ -200,19 +200,32 @@ namespace ShamsAlShamoos01.Server.Controllers
 
 
         // کمکی برای StatusConfirmation03
-        private static string GetClauseForConfirmation03(string regUnitCondition, bool isPass, bool isWait, bool notClear)
+        private static string GetClauseForConfirmation03(
+            string regUnitCondition,
+            bool isPass,
+            bool isWait,
+            bool notClear)
         {
             string baseClause = $"{regUnitCondition} AND StatusConfirmation02 = 320";
 
             if (isPass)
+            {
                 return $"{baseClause} AND StatusConfirmation03 = 320";
+            }
+
             if (notClear)
+            {
                 return $"{baseClause} AND StatusConfirmation03 = 321";
+            }
+
             if (isWait)
+            {
                 return $"{baseClause} AND StatusConfirmation03 = 319";
+            }
 
             return null;
         }
+
 
         private static string BuildYegan00Clause(List<string> roles, string baseCondition, string unitCondition, bool isPass, bool isWait)
         {
