@@ -191,6 +191,7 @@ namespace ShamsAlShamoos01.Server.Controllers
                 }
             }
 
+
             if (!roles.Contains("StatusHistoryRegisterKalaConfirmation02") &&
                 !roles.Contains("StatusHistoryRegisterKalaConfirmation03"))
             {
