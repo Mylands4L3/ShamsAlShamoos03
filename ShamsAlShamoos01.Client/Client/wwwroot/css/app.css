@@ -1,0 +1,115 @@
+/* ---------------------------------------------
+   Fonts
+--------------------------------------------- */
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+#blazor-error-ui {
+    display: none;
+}
+
+@font-face {
+    font-family: 'B Mitra';
+    src: url('../fonts/B Mitra_0.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'B Mitra';
+    src: url('../fonts/B Mitra Bold_0.ttf') format('truetype');
+    font-weight: bold;
+}
+
+/* ---------------------------------------------
+   Global RTL + Typography
+--------------------------------------------- */
+body, html, .page, .rtl, main, article {
+    font-family: 'B Mitra', sans-serif;
+    direction: rtl;
+    text-align: right;
+}
+
+/* ---------------------------------------------
+   Grid - Syncfusion (عمومی)
+--------------------------------------------- */
+.bm-grid {
+    font-family: 'B Mitra', sans-serif;
+    direction: rtl;
+    text-align: right;
+}
+
+    .bm-grid .e-headercell {
+        text-align: right;
+    }
+
+/* ---------------------------------------------
+   Errors + Misc (عمومی)
+--------------------------------------------- */
+.validation-message {
+    color: red;
+}
+
+/* ---------------------------------------------
+   Loading – عمومی
+--------------------------------------------- */
+.loading-progress {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+    .loading-progress circle:nth-child(1) {
+        stroke: #d0d0d0;
+        stroke-width: 8;
+        fill: none;
+    }
+
+    .loading-progress circle:nth-child(2) {
+        stroke: #007bff;
+        stroke-width: 8;
+        fill: none;
+        stroke-dasharray: 251.2;
+        stroke-dashoffset: 0;
+        transform-origin: 50% 50%;
+        animation: spin 1s linear infinite;
+    }
+
+@keyframes spin {
+    0% {
+        stroke-dashoffset: 251.2;
+        transform: rotate(0deg);
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        transform: rotate(360deg);
+    }
+}
+
+.loading-progress-text {
+    position: fixed;
+    top: calc(50% + 50px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    color: #333;
+    font-family: 'B Mitra', sans-serif;
+}
+
+/* دکمه‌های خطای Blazor */
+#blazor-error-ui a {
+    display: inline-block;
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+    #blazor-error-ui a.dismiss {
+        background: #dc3545;
+    }

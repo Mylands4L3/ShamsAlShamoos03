@@ -1,0 +1,88 @@
+/* Navbar RTL */
+.rtl-navbar .container-fluid {
+    direction: rtl;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rtl-navbar .navbar-brand {
+    margin-left: auto;
+}
+
+.rtl-navbar .navbar-toggler {
+    margin-right: auto;
+}
+
+/* Sidebar دسکتاپ */
+.desktop-sidebar {
+    width: 220px;
+    background-color: #343a40;
+    color: #fff;
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    right: 0;
+    padding: 1rem 0.5rem;
+    overflow-y: auto;
+    transition: width 0.3s ease;
+    z-index: 1000;
+}
+
+    .desktop-sidebar.collapsed {
+        width: 60px;
+    }
+
+    .desktop-sidebar .nav-link {
+        font-size: 18px;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+    }
+
+        .desktop-sidebar .nav-link span.ms-2 {
+            transition: opacity 0.3s ease;
+        }
+
+    .desktop-sidebar.collapsed .nav-link span.ms-2 {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+    }
+
+/* Main Layout */
+main {
+    margin-right: 220px;
+    padding: 1rem;
+    transition: margin 0.3s ease;
+}
+
+    main.collapsed-main {
+        margin-right: 60px;
+    }
+
+/* Responsive Mobile */
+@media (max-width: 767.98px) {
+    .desktop-sidebar {
+        display: none;
+    }
+
+    main, main.collapsed-main {
+        margin-right: 0 !important;
+    }
+
+    .nav-link {
+        font-size: 20px;
+    }
+
+    .navbar-brand {
+        font-size: 24px;
+    }
+
+    .offcanvas {
+        z-index: 1050;
+        visibility: visible;
+    }
+}

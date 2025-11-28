@@ -1,0 +1,152 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using ShamsAlShamoos01.Infrastructure;
+ using ShamsAlShamoos01.Infrastructure.Persistence.Contexts;
+using ShamsAlShamoos01.Infrastructure.Persistence.Repositories;
+using ShamsAlShamoos01.Infrastructure.Persistence.UnitOfWork;
+using ShamsAlShamoos01.Server.Services;
+using ShamsAlShamoos01.Shared.Entities;
+using Syncfusion.Licensing;
+using System.Globalization;
+using System.Text.RegularExpressions;
+
+
+//فارسی کردن
+var culture = new CultureInfo("fa-IR");
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
+//فارسی کردن
+
+//if (File.Exists(Directory.GetCurrentDirectory() + "/SyncfusionLicense.txt"))
+//{
+//    string licenseKey = File.ReadAllText(Directory.GetCurrentDirectory() + "/SyncfusionLicense.txt").Trim();
+//    SyncfusionLicenseProvider.RegisterLicense(licenseKey);
+//    if (File.Exists(Directory.GetCurrentDirectory() + "/wwwroot/scripts/index.js"))
+//    {
+//        string regexPattern = "ej.base.registerLicense(.*);";
+//        string jsContent = File.ReadAllText(Directory.GetCurrentDirectory() + "/wwwroot/scripts/index.js");
+//        MatchCollection matchCases = Regex.Matches(jsContent, regexPattern);
+//        foreach (Match matchCase in matchCases)
+//        {
+//            var replaceableString = matchCase.ToString();
+//            jsContent = jsContent.Replace(replaceableString, "ej.base.registerLicense('" + licenseKey + "');");
+//        }
+//        File.WriteAllText(Directory.GetCurrentDirectory() + "/wwwroot/scripts/index.js", jsContent);
+//    }
+//}
+
+
+var licenseKey = "MTU4NUAzMjM3MkUzMTJFMzluT08wbzRnYm4zUlFDOVRzWVpYbUtuSEl0aUhTZmNMYjQxekhrV0NVRnlzPQ==";
+
+SyncfusionLicenseProvider.RegisterLicense(licenseKey);
+
+
+var builder = WebApplication.CreateBuilder(args);
+
+// --------------------
+// 1️⃣ Services
+// --------------------
+
+// Controllers + Swagger
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// CORS (برای اینکه Client به سرور وصل شود)
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// Session + Cache
+builder.Services.AddDistributedMemoryCache(); // برای Session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// EF Core DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<ApplicationUsers, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+// UnitOfWork و Repository
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDapperGenericRepository, DapperGenericRepository>();
+builder.Services.AddScoped<APIDataService01>();
+builder.Services.AddInfrastructure(builder.Configuration);
+
+// AutoMapper (اختیاری اگر داری)
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// --------------------
+// 2️⃣ Build App
+// --------------------
+var app = builder.Build();
+
+
+//using Microsoft.Extensions.FileProviders;
+
+//var qrFilesPath = Path.Combine(AppContext.BaseDirectory, "QrFiles");
+
+//if (!Directory.Exists(qrFilesPath))
+//    Directory.CreateDirectory(qrFilesPath);
+
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(qrFilesPath),
+//    RequestPath = "/QrFiles"
+//});
+
+
+//var qrFilesPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "QrFiles"));
+var qrFilesPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(),   "QrFiles"));
+
+if (!Directory.Exists(qrFilesPath))
+    Directory.CreateDirectory(qrFilesPath);
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(qrFilesPath),
+    RequestPath = "/QrFiles"
+});
+
+
+// --------------------
+// 3️⃣ Middleware
+// --------------------
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+// Serve Blazor framework files (_framework)
+app.UseBlazorFrameworkFiles();
+// CORS قبل از MapControllers
+app.UseCors();
+
+// Session middleware
+app.UseSession();
+
+app.MapControllers();
+app.MapFallbackToFile("index.html");
+
+// --------------------
+// 4️⃣ Run
+// --------------------
+app.Run();

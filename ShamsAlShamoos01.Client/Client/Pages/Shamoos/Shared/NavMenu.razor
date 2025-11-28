@@ -1,0 +1,89 @@
+﻿<header class="navbar navbar-dark bg-dark rtl-navbar fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/" title="صفحه اصلی ثبت فاکتور">ثبت فاکتور</a>
+
+        <!-- دکمه موبایل (همبرگر) -->
+        <button class="btn btn-dark d-md-none" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile"
+                aria-controls="sidebarMobile" aria-label="باز کردن منو">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- دکمه دسکتاپ Collapse Sidebar -->
+        <button class="btn btn-dark d-none d-md-inline ms-2"
+                @onclick="ToggleDesktopMenu"
+                aria-label="کوچیک/بزرگ کردن منوی دسکتاپ"
+                aria-expanded="@DesktopCollapsed">
+            <span class="oi oi-menu"></span>
+        </button>
+    </div>
+</header>
+
+<!-- Sidebar دسکتاپ -->
+<aside class="desktop-sidebar bg-dark text-white vh-100 position-fixed p-2 @(DesktopCollapsed ? "collapsed" : "") d-none d-md-block">
+    <nav class="nav flex-column" aria-label="Desktop sidebar navigation">
+        <NavLink class="nav-link text-white mb-2 d-flex align-items-center" href="" Match="NavLinkMatch.All">
+            <span class="oi oi-home"></span>
+            @if (!DesktopCollapsed)
+            {
+                <span class="ms-2">خانه</span>
+            }
+        </NavLink>
+        <NavLink class="nav-link text-white mb-2 d-flex align-items-center" href="fetchdata">
+            <span class="oi oi-list-rich"></span>
+            @if (!DesktopCollapsed)
+            {
+                <span class="ms-2">سایر</span>
+            }
+        </NavLink>
+        <NavLink class="nav-link text-white mb-2 d-flex align-items-center" href="history-register">
+            <span class="oi oi-document"></span>
+            @if (!DesktopCollapsed)
+            {
+                <span class="ms-2">جدول ثبت فاکتور</span>
+            }
+        </NavLink>
+        <NavLink class="nav-link text-white mb-2 d-flex align-items-center" href="counter">
+            <span class="oi oi-plus"></span>
+            @if (!DesktopCollapsed)
+            {
+                <span class="ms-2">شمارنده</span>
+            }
+        </NavLink>
+        <NavLink class="nav-link text-white mb-2 d-flex align-items-center" href="https://sistani-mashhad.ir/" target="_blank" rel="noopener">
+            <span class="oi oi-info"></span>
+            @if (!DesktopCollapsed)
+            {
+                <span class="ms-2">درباره ما</span>
+            }
+        </NavLink>
+    </nav>
+</aside>
+
+<!-- Sidebar موبایل (offcanvas) -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="sidebarMobile" aria-labelledby="sidebarMobileLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="sidebarMobileLabel">منو</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="بستن"></button>
+    </div>
+    <div class="offcanvas-body">
+        <nav class="nav flex-column">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">خانه</NavLink>
+            <NavLink class="nav-link" href="fetchdata">سایر</NavLink>
+            <NavLink class="nav-link" href="history-register">جدول ثبت فاکتور</NavLink>
+            <NavLink class="nav-link" href="counter">شمارنده</NavLink>
+            <NavLink class="nav-link" href="https://sistani-mashhad.ir/" target="_blank" rel="noopener">درباره ما</NavLink>
+        </nav>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool DesktopCollapsed { get; set; } = true; // پیش‌فرض کوچیک
+    [Parameter] public EventCallback<bool> DesktopCollapsedChanged { get; set; }
+
+    private async Task ToggleDesktopMenu()
+    {
+        DesktopCollapsed = !DesktopCollapsed;
+        await DesktopCollapsedChanged.InvokeAsync(DesktopCollapsed);
+    }
+}

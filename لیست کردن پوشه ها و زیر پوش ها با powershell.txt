@@ -1,0 +1,38 @@
+# مسیر ریشه: همان مسیر که PowerShell در آن اجرا شده
+$rootPath = Get-Location
+
+# مسیر فایل خروجی داخل همان مسیر
+$outputFile = Join-Path -Path $rootPath -ChildPath "output.txt"
+
+# اگر فایل خروجی قبلاً وجود دارد، پاک می‌کنیم
+if (Test-Path $outputFile) {
+    Remove-Item $outputFile
+}
+
+# تابع برای نمایش درختی فایل‌ها و پوشه‌ها
+function Write-Tree {
+    param (
+        [string]$Path,
+        [int]$IndentLevel = 0
+    )
+
+    $items = Get-ChildItem -Path $Path
+    foreach ($item in $items) {
+        $indent = " " * ($IndentLevel * 4)  # چهار فاصله برای هر سطح
+        if ($item.PSIsContainer) {
+            # نمایش پوشه با [Folder] قبل نام
+            ("$indent[Folder] " + $item.Name) | Out-File -FilePath $outputFile -Append
+            # بازگشت بازگشتی برای زیرپوشه‌ها
+            Write-Tree -Path $item.FullName -IndentLevel ($IndentLevel + 1)
+        } else {
+            # نمایش فایل
+            ("$indent" + $item.Name) | Out-File -FilePath $outputFile -Append
+        }
+    }
+}
+
+# نوشتن درختی از مسیر ریشه
+"[Root] " + $rootPath | Out-File -FilePath $outputFile
+Write-Tree -Path $rootPath
+
+Write-Host "فایل خروجی در مسیر زیر ساخته شد و لیست درختی فایل‌ها و پوشه‌ها در آن ذخیره شد:`n$outputFile"
