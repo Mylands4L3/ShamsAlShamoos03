@@ -18,11 +18,13 @@ public class QrCodeService
         byte[] pngBytes = pngQr.GetGraphic(20);
 
         // مسیر یکسان با StaticFiles
-        //string qrFilesPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "QrFiles"));
         string qrFilesPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "QrFiles"));
 
         if (!Directory.Exists(qrFilesPath))
+        {
             Directory.CreateDirectory(qrFilesPath);
+        }
+
 
         string filePath = Path.Combine(qrFilesPath, $"{fileName}.png");
         File.WriteAllBytes(filePath, pngBytes);

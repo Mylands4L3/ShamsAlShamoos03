@@ -82,7 +82,10 @@ var app = builder.Build();
 var qrFilesPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(),   "QrFiles"));
 
 if (!Directory.Exists(qrFilesPath))
+{
     Directory.CreateDirectory(qrFilesPath);
+}
+
 
 app.UseStaticFiles(new StaticFileOptions
 {

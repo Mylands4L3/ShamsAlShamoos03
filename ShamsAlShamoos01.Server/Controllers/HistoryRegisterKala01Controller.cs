@@ -303,11 +303,15 @@ namespace ShamsAlShamoos01.Server.Controllers
             try
             {
                 if (model.CrudModel?.Value == null)
+                {
                     return BadRequest("Invalid data");
+                }
 
                 var data = _context.HistoryRegisterKala01UW.GetById(model.CrudModel.Value.HistoryRegisterKala01ID);
                 if (data == null)
+                {
                     return NotFound("Record not found");
+                }
 
                 UpdateEntityBasedOnRoles(data, model.CrudModel.Value, model.Roles);
 
