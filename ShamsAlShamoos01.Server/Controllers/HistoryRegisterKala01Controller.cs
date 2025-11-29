@@ -44,6 +44,7 @@ namespace ShamsAlShamoos01.Server.Controllers
             get => HttpContext.Session.GetString("jsonSelectedMelliCode01") ?? "";
             set => HttpContext.Session.SetString("jsonSelectedMelliCode01", value);
         }
+        // TODO: متدی بساز که تمام محصولات با قیمت > 1000 را از DB بخواند و مرتب کند
 
         public List<string> SelectedMelliCode01
         {
