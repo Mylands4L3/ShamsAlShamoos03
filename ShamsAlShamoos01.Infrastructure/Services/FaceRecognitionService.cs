@@ -3,6 +3,7 @@ using OpenCvSharp.Dnn;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ShamsAlShamoos01.Infrastructure.Services
 {
@@ -35,18 +36,9 @@ namespace ShamsAlShamoos01.Infrastructure.Services
 
             _faceEmbedder = CvDnn.ReadNetFromTorch(embedderPath);
         }
-        public List<string> FindSimilarFaces(string targetImagePath, string folderPath, double threshold = 0.2)
+
+        public List<string> FindSimilarFaces(string targetImagePath, string folderPath, double threshold = 0.6)
         {
-//            جمع‌بندی
-
-//برای کم کردن حساسیت، توصیه اصلی من:
-
-//            threshold در FindSimilarFaces را بزرگتر کنید(مثلاً 0.7 یا 0.75).
-
-//در صورت نیاز، confidenceThreshold در DetectFaces را کمی کاهش دهید.
-
-//این دو تغییر کافی است بدون اینکه کدهای اصلی را تغییر دهید
-
             var matches = new List<string>();
             string resultFolder = @"D:\upload\Result01";
 
@@ -61,7 +53,7 @@ namespace ShamsAlShamoos01.Infrastructure.Services
             if (!Directory.Exists(resultFolder))
                 Directory.CreateDirectory(resultFolder);
 
-            var targetEmbeddings = GetEmbeddings(targetImagePath);
+            var targetEmbeddings = GetEmbeddings(targetImagePath, out var targetFacesImagePath);
 
             if (targetEmbeddings == null || targetEmbeddings.Count == 0)
             {
@@ -76,14 +68,13 @@ namespace ShamsAlShamoos01.Infrastructure.Services
                 .Where(f => f.ToLower().EndsWith(".jpg") || f.ToLower().EndsWith(".jpeg") ||
                            f.ToLower().EndsWith(".png") || f.ToLower().EndsWith(".bmp")))
             {
-                var embeddings = GetEmbeddings(file);
+                var embeddings = GetEmbeddings(file, out var facesImgPath);
                 if (embeddings == null || embeddings.Count == 0)
                 {
                     Console.WriteLine($"No face detected in file: {Path.GetFileName(file)}");
                     continue;
                 }
 
-                // مقایسه با تمام چهره‌های موجود در تصویر
                 foreach (var emb in embeddings)
                 {
                     double dist = CosineDistance(targetEmbedding, emb);
@@ -113,104 +104,11 @@ namespace ShamsAlShamoos01.Infrastructure.Services
             return matches;
         }
 
-        public List<string> FindSimilarFaces22(string targetImagePath, string folderPath, double threshold = 0.6)
-        {
-            var matches = new List<string>();
-
-            // بررسی وجود فایل هدف
-            if (!File.Exists(targetImagePath))
-            {
-                Console.WriteLine("Target image file not found.");
-                return matches;
-            }
-
-            var targetEmbeddings = GetEmbeddings(targetImagePath);
-
-            if (targetEmbeddings == null || targetEmbeddings.Count == 0)
-            {
-                Console.WriteLine("No face detected in target image.");
-                return matches;
-            }
-
-            // فقط از اولین چهره در تصویر هدف استفاده می‌کنیم
-            var targetEmbedding = targetEmbeddings[0];
-
-            foreach (var file in Directory.GetFiles(folderPath, "*.*", SearchOption.AllDirectories)
-                .Where(f => f.ToLower().EndsWith(".jpg") || f.ToLower().EndsWith(".jpeg") ||
-                           f.ToLower().EndsWith(".png") || f.ToLower().EndsWith(".bmp")))
-            {
-                var embeddings = GetEmbeddings(file);
-                if (embeddings == null || embeddings.Count == 0)
-                {
-                    Console.WriteLine($"No face detected in file: {Path.GetFileName(file)}");
-                    continue;
-                }
-
-                // مقایسه با تمام چهره‌های موجود در تصویر
-                foreach (var emb in embeddings)
-                {
-                    double dist = CosineDistance(targetEmbedding, emb);
-                    Console.WriteLine($"Distance to {Path.GetFileName(file)}: {dist:F4}");
-
-                    if (dist < threshold)
-                    {
-                        matches.Add(file);
-                        break; // اگر یک چهره مشابه پیدا شد، به فایل بعدی برو
-                    }
-                }
-            }
-
-            return matches;
-        }
-
-        private List<float[]> GetEmbeddings(string imagePath)
-        {
-            Mat img = Cv2.ImRead(imagePath);
-            if (img.Empty())
-            {
-                Console.WriteLine($"Failed to read image: {imagePath}");
-                return null;
-            }
-
-            var faces = DetectFaces(img);
-            if (faces.Count == 0)
-                return null;
-
-            var embeddings = new List<float[]>();
-
-            foreach (var face in faces)
-            {
-                Mat faceImg = new Mat(img, face);
-
-                // پیش‌پردازش بهتر برای embedder
-                Mat blob = CvDnn.BlobFromImage(faceImg, 1.0 / 255, new Size(96, 96),
-                    new Scalar(0, 0, 0), true, false);
-
-                _faceEmbedder.SetInput(blob);
-                Mat output = _faceEmbedder.Forward();
-
-                // تبدیل خروجی به آرایه
-                output.GetArray(out float[] embedding);
-
-                // نرمال‌سازی embedding
-                NormalizeVector(embedding);
-
-                embeddings.Add(embedding);
-            }
-
-            return embeddings;
-        }
-
         private List<Rect> DetectFaces(Mat img, float confidenceThreshold = 0.2f)
         {
-            //در صورت نیاز، confidenceThreshold در DetectFaces را کمی کاهش دهید.
             var faces = new List<Rect>();
 
-            // ایجاد blob با پارامترهای صحیح برای detector
-            int targetWidth = 300;
-            int targetHeight = 300;
-
-            Mat blob = CvDnn.BlobFromImage(img, 1.0, new Size(targetWidth, targetHeight),
+            Mat blob = CvDnn.BlobFromImage(img, 1.0, new Size(300, 300),
                 new Scalar(104, 177, 123), false, false);
 
             _faceDetector.SetInput(blob);
@@ -238,8 +136,8 @@ namespace ShamsAlShamoos01.Infrastructure.Services
                     int faceWidth = x2 - x1;
                     int faceHeight = y2 - y1;
 
-                    // فیلتر کردن چهره‌های بسیار کوچک
-                    if (faceWidth > 20 && faceHeight > 20)
+                    // حذف فیلتر برای چهره‌های کوچک
+                    if (faceWidth > 5 && faceHeight > 5)
                     {
                         faces.Add(new Rect(x1, y1, faceWidth, faceHeight));
                     }
@@ -249,21 +147,61 @@ namespace ShamsAlShamoos01.Infrastructure.Services
             return faces;
         }
 
+        private List<float[]> GetEmbeddings(string imagePath, out string debugImagePath)
+        {
+            Mat img = Cv2.ImRead(imagePath);
+            debugImagePath = Path.Combine(Path.GetTempPath(), "debug_" + Path.GetFileName(imagePath));
+
+            if (img.Empty())
+            {
+                Console.WriteLine($"Failed to read image: {imagePath}");
+                return null;
+            }
+
+            var faces = DetectFaces(img);
+            if (faces.Count == 0)
+                return null;
+
+            var embeddings = new List<float[]>();
+
+            foreach (var face in faces)
+            {
+                Mat faceImg = new Mat(img, face);
+
+                // پیش‌پردازش برای embedder
+                Mat blob = CvDnn.BlobFromImage(faceImg, 1.0 / 255, new Size(96, 96),
+                    new Scalar(0, 0, 0), true, false);
+
+                _faceEmbedder.SetInput(blob);
+                Mat output = _faceEmbedder.Forward();
+
+                // تبدیل خروجی به آرایه
+                output.GetArray(out float[] embedding);
+
+                NormalizeVector(embedding);
+                embeddings.Add(embedding);
+
+                // رسم چهره‌ها روی تصویر برای بررسی
+                Cv2.Rectangle(img, face, Scalar.Red, 2);
+            }
+
+            // ذخیره تصویر برای دیباگ
+            Cv2.ImWrite(debugImagePath, img);
+
+            return embeddings;
+        }
+
         private void NormalizeVector(float[] vector)
         {
             double sum = 0;
             for (int i = 0; i < vector.Length; i++)
-            {
                 sum += vector[i] * vector[i];
-            }
 
             double norm = Math.Sqrt(sum);
             if (norm > 1e-6)
             {
                 for (int i = 0; i < vector.Length; i++)
-                {
                     vector[i] = (float)(vector[i] / norm);
-                }
             }
         }
 
@@ -287,7 +225,7 @@ namespace ShamsAlShamoos01.Infrastructure.Services
                 return 1.0;
 
             double similarity = dot / (na * nb);
-            return 1.0 - similarity; // تبدیل similarity به distance
+            return 1.0 - similarity;
         }
     }
 }
