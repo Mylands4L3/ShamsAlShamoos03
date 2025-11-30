@@ -11,7 +11,10 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.22" PrivateAssets="all" />
 		<PackageReference Include="Syncfusion.Blazor" Version="27.1.48" />
 	</ItemGroup>
-	
+	<PropertyGroup>
+  <StaticWebAssetUseHash>true</StaticWebAssetUseHash>
+</PropertyGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\..\ShamsAlShamoos01.Shared\ShamsAlShamoos01.Shared.csproj" />
 
