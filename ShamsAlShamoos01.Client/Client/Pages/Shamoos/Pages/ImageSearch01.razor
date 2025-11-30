@@ -1,0 +1,32 @@
+﻿@page "/image-search"
+@inject HttpClient Http
+
+<h3>آپلود و پیدا کردن تصاویر مشابه</h3>
+
+<InputFile OnChange="UploadFile" />
+<ul>
+    @foreach (var img in similarImages)
+    {
+        <li>@img</li>
+    }
+</ul>
+
+@code {
+    private List<string> similarImages = new();
+
+    private async Task UploadFile(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file == null) return;
+
+        var content = new MultipartFormDataContent();
+        using var stream = file.OpenReadStream(maxAllowedSize: 10_000_000); // حداکثر 10 مگابایت
+        content.Add(new StreamContent(stream), "file", file.Name);
+
+        var response = await Http.PostAsync("api/ImageSearch/find-similar", content);
+        similarImages = await response.Content.ReadFromJsonAsync<List<string>>() ?? new List<string>();
+    }
+
+
+
+}
