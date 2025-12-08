@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShamsAlShamoos01.Infrastructure.Services;
+using System.Data.Common;
 
 namespace ShamsAlShamoos01.Server.Controllers
 {
@@ -8,10 +9,13 @@ namespace ShamsAlShamoos01.Server.Controllers
     public class QrController : ControllerBase
     {
         private readonly QrCodeService _qr;
+        private readonly QrBatchService _qrBatch;
 
-        public QrController(QrCodeService qr)
+        public QrController(QrCodeService qr, QrBatchService qrBatch)
         {
-            _qr = qr;
+            _qr = qr; 
+            _qrBatch = qrBatch;
+
         }
         [HttpGet("Generate")]
         public IActionResult Generate([FromQuery] string text)
@@ -26,7 +30,16 @@ namespace ShamsAlShamoos01.Server.Controllers
 
             return Ok(fileName); // فقط نام فایل
         }
+        [HttpPost("GenerateBatch")]
+        public IActionResult GenerateBatch([FromBody] string longText)
+        {
+            if (string.IsNullOrWhiteSpace(longText))
+                return BadRequest("Text cannot be empty");
 
+            var files = _qrBatch.GenerateMultipleQrs(longText);
+
+            return Ok(files);
+        }
         [HttpGet("Generate1")]
         public IActionResult GenerateQr([FromQuery] string text)
         {
