@@ -45,7 +45,9 @@ namespace ShamsAlShamoos01.Server.Controllers
             string qrFilesPath = GetQrFolderPath();
 
             if (!Directory.Exists(qrFilesPath))
+            {
                 return Ok(new string[] { });
+            }
 
             var files = Directory.GetFiles(qrFilesPath, "*.png")
                                  .Select(f => Path.GetFileNameWithoutExtension(f))
@@ -59,7 +61,9 @@ namespace ShamsAlShamoos01.Server.Controllers
         public IActionResult GenerateQr([FromQuery] string text)
         {
             if (string.IsNullOrWhiteSpace(text))
+            {
                 return BadRequest("Text cannot be empty");
+            }
 
             string fileName = GenerateQrFile(text);
             return Ok(fileName);
@@ -69,12 +73,16 @@ namespace ShamsAlShamoos01.Server.Controllers
         public IActionResult ReadQr([FromQuery] string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
+            {
                 return BadRequest("FileName cannot be empty");
+            }
 
             string filePath = GetFullFilePath(fileName);
 
             if (!System.IO.File.Exists(filePath))
+            {
                 return NotFound($"File not found: {filePath}");
+            }
 
             try
             {
@@ -82,7 +90,9 @@ namespace ShamsAlShamoos01.Server.Controllers
                 var text = qrReader.ReadQrFromFile(filePath);
 
                 if (string.IsNullOrEmpty(text))
+                {
                     return BadRequest("خواندن متن QR ناموفق بود");
+                }
 
                 return Ok(text);
             }
@@ -96,7 +106,9 @@ namespace ShamsAlShamoos01.Server.Controllers
         public IActionResult GenerateBatch([FromBody] string longText)
         {
             if (string.IsNullOrWhiteSpace(longText))
+            {
                 return BadRequest("Text cannot be empty");
+            }
 
             var files = _qrBatch.GenerateMultipleQrs(longText);
             return Ok(files);
@@ -109,7 +121,9 @@ namespace ShamsAlShamoos01.Server.Controllers
             string filePath = Path.Combine(solutionRoot, "QrFiles", fileName + ".png");
 
             if (!System.IO.File.Exists(filePath))
+            {
                 return NotFound($"File not found: {filePath}");
+            }
 
             var bytes = System.IO.File.ReadAllBytes(filePath);
             return File(bytes, "image/png");
