@@ -37,8 +37,6 @@ namespace ShamsAlShamoos01.Infrastructure.Persistence.Repositories
             if (filter == null)
             {     
                 return await GetAllAsync();
-                return await GetAllAsync();
-
             }
         
             return await _table.Where(filter).ToListAsync();
