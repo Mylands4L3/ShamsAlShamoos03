@@ -52,7 +52,30 @@ public class QrCodeService
         var bytes = qrCode.GetGraphic(20);
         return Convert.ToBase64String(bytes);
     }
-    public string GenerateQrToFile(string text, string fileName)
+
+    public string GenerateQrToFile(string text, string folderName, string fileName)
+    {
+        var qrData = QRCodeGenerator.GenerateQrCode(text, QRCodeGenerator.ECCLevel.Q);
+        var pngQr = new PngByteQRCode(qrData);
+        byte[] pngBytes = pngQr.GetGraphic(20);
+
+        string basePath = Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "QrFiles",
+            folderName
+        );
+
+        if (!Directory.Exists(basePath))
+            Directory.CreateDirectory(basePath);
+
+        string filePath = Path.Combine(basePath, $"{fileName}.png");
+        File.WriteAllBytes(filePath, pngBytes);
+
+        // مسیر نسبی برای دیتابیس
+        return Path.Combine(folderName, $"{fileName}.png");
+    }
+
+    public string GenerateQrToFile111(string text, string fileName)
     {
         var qrData = QRCodeGenerator.GenerateQrCode(text, QRCodeGenerator.ECCLevel.Q);
         var pngQr = new PngByteQRCode(qrData);

@@ -1,0 +1,44 @@
+﻿@page "/create-qr-from-txt-api"
+@inject HttpClient Http
+
+<h3>آپلود فایل متنی Base64 و تبدیل به تصویر از طریق API</h3>
+
+<InputFile OnChange="OnInputFileChange" />
+@if (!string.IsNullOrEmpty(ResultImagePath))
+{
+    <p>تصویر تولید شد:</p>
+    <img src="@ResultImagePath" style="max-width:400px;" />
+    <p><a href="@ResultImagePath" target="_blank">دانلود تصویر</a></p>
+}
+
+@code {
+    private string? ResultImagePath;
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file == null) return;
+
+        using var stream = file.OpenReadStream();
+        using var reader = new StreamReader(stream);
+        string base64String = await reader.ReadToEndAsync();
+
+        var request = new { Base64String = base64String };
+        var response = await Http.PostAsJsonAsync("api/UploadBase64/upload", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<ResponseModel>();
+            ResultImagePath = result?.ImagePath;
+        }
+        else
+        {
+            Console.WriteLine("خطا در ارسال فایل به API");
+        }
+    }
+
+    public class ResponseModel
+    {
+        public string ImagePath { get; set; } = string.Empty;
+    }
+}

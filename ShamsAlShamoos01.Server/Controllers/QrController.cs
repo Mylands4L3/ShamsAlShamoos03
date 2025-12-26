@@ -18,12 +18,27 @@ namespace ShamsAlShamoos01.Server.Controllers
             _qrBatch = qrBatch;
         }
 
+        // 🔹 لیست همه QRها (پوشه + فایل)
+        [HttpGet("GetAllFiles")]
+        public IActionResult GetAllFiles()
+            => Ok(_qrBatch.GetAllQrFiles());
+
+        // 🔹 خواندن متن QR
+        [HttpGet("ReadQr")]
+        public IActionResult ReadQr([FromQuery] string relativePath)
+            => Ok(_qrBatch.ReadQrText(relativePath));
+
+        // 🔹 تولید batch
+        [HttpPost("GenerateBatch")]
+        public IActionResult GenerateBatch([FromBody] string longText)
+            => Ok(_qrBatch.GenerateMultipleQrs(longText));
+
         #region Helper Methods
 
         private string GenerateQrFile(string text)
         {
             string fileName = $"qr_{DateTime.Now.Ticks}";
-            _qr.GenerateQrToFile(text, fileName);
+            _qr.GenerateQrToFile(text, "qr_", fileName);
             return fileName;
         }
 
@@ -39,8 +54,8 @@ namespace ShamsAlShamoos01.Server.Controllers
 
         #endregion
 
-        [HttpGet("GetAllFiles")]
-        public IActionResult GetAllFiles()
+        [HttpGet("GetAllFiles2")]
+        public IActionResult GetAllFiles2()
         {
             string qrFilesPath = GetQrFolderPath();
 
@@ -69,8 +84,8 @@ namespace ShamsAlShamoos01.Server.Controllers
             return Ok(fileName);
         }
 
-        [HttpGet("ReadQr")]
-        public IActionResult ReadQr([FromQuery] string fileName)
+        [HttpGet("ReadQr2")]
+        public IActionResult ReadQr2([FromQuery] string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
             {
@@ -102,8 +117,8 @@ namespace ShamsAlShamoos01.Server.Controllers
             }
         }
 
-        [HttpPost("GenerateBatch")]
-        public IActionResult GenerateBatch([FromBody] string longText)
+        [HttpPost("GenerateBatch2")]
+        public IActionResult GenerateBatch2([FromBody] string longText)
         {
             if (string.IsNullOrWhiteSpace(longText))
             {

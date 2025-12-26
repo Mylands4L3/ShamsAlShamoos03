@@ -25,23 +25,18 @@
         {
             <div class="col-md-3 col-sm-4 col-6 text-center">
                 <div class="p-2 border rounded shadow-sm">
-                    <img src="@($"{Http.BaseAddress}QrFiles/{qr}.png")"
+                    <img src="@($"{Http.BaseAddress}QrFiles/{qr.RelativePath}")"
                          class="img-fluid rounded" alt="QR Code" />
-                    <div class="fw-bold mt-2">@qr</div>
-                    <div class="text-muted mt-1">@QrTexts.GetValueOrDefault(qr)</div>
+                    <div class="fw-bold mt-2">@qr.FileName</div>
+                    <div class="text-muted mt-1">@QrTexts.GetValueOrDefault(qr.RelativePath)</div>
                 </div>
             </div>
         }
     </div>
 }
-else if (!IsLoading)
-{
-    <p class="text-center text-muted">QRی موجود نیست</p>
-}
-
 @code {
     public bool IsLoading { get; set; } = false;
-    public List<string> QrFiles { get; set; } = new();
+    public List<QrFileDto> QrFiles { get; set; } = new();
     public Dictionary<string, string> QrTexts { get; set; } = new();
 
     private async Task LoadExistingQRCodes()
@@ -52,9 +47,8 @@ else if (!IsLoading)
 
         try
         {
-            // فرض کنیم فایل‌ها به صورت دستی در QrFiles هستند
-            // و مسیر سرور همان است که GetQrFile استفاده می‌کند
-            var files = await Http.GetFromJsonAsync<List<string>>("api/Qr/GetAllFiles");
+            // تغییر به List<QrFileDto>
+            var files = await Http.GetFromJsonAsync<List<QrFileDto>>("api/Qr/GetAllFiles");
 
             if (files != null && files.Count > 0)
             {
@@ -63,26 +57,15 @@ else if (!IsLoading)
                 // خواندن متن QRها
                 var tasks = QrFiles.Select(async qr =>
                 {
-
                     try
                     {
-                        var response = await Http.GetAsync($"api/Qr/ReadQr?fileName={qr}");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var text = await response.Content.ReadAsStringAsync();
-                            QrTexts[qr] = text;
-                        }
-                        else
-                        {
-                            QrTexts[qr] = $"Error: {response.StatusCode}";
-                        }
+                        var text = await Http.GetStringAsync($"api/Qr/ReadQr?relativePath={qr.RelativePath}");
+                        QrTexts[qr.RelativePath] = text;
                     }
-                    catch (Exception sf)
+                    catch
                     {
-                        QrTexts[qr] = "خواندن متن QR ناموفق بود";
+                        QrTexts[qr.RelativePath] = "خواندن متن QR ناموفق بود";
                     }
-
- 
                 });
 
                 await Task.WhenAll(tasks);
