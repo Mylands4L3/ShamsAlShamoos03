@@ -1,0 +1,108 @@
+﻿@page "/CreateQRFromtxt01"
+@layout ShamsAlShamoos03.Client.Client.Pages.Shamoos.Shared.MainLayout
+@inject NavigationManager Nav
+@inject HttpClient Http
+
+<PageTitle>ایجاد QR از متن | شمس‌الشموس</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="تبدیل متن طولانی به چندین QR Code در سامانه شمس‌الشموس">
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</HeadContent>
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4 text-center">📦 ساخت QR از متن بلند</h2>
+
+    <!-- فرم ورودی -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+
+            <label class="form-label fw-bold">متن ورودی:</label>
+            <textarea class="form-control form-control-lg"
+                      @bind="Value"
+                      rows="5"
+                      placeholder="متن طولانی وارد کنید..."
+                      aria-label="متن برای QR"></textarea>
+
+            <div class="text-end mt-3">
+                <button class="btn btn-success btn-lg px-4"
+                        disabled="@IsGenerating"
+                        @onclick="GenerateBatch">
+
+                    @if (IsGenerating)
+                    {
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        <span>در حال ساخت...</span>
+                    }
+                    else
+                    {
+                        <span>ساخت QR</span>
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نمایش QRها -->
+    @if (QrFiles?.Count > 0)
+    {
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <h4 class="fw-bold text-center mb-3">📑 QRهای ساخته‌شده</h4>
+
+                <div class="row g-4">
+                    @foreach (var qr in QrFiles)
+                    {
+                        <div class="col-md-3 col-sm-4 col-6 text-center">
+                            <div class="p-2 border rounded shadow-sm">
+                                <img src="@($"{Http.BaseAddress}QrFiles/{qr}")"
+                                     class="img-fluid rounded"
+                                     alt="QR Code" />
+
+                                <div class="small mt-2">@qr</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+    public string Value { get; set; } = "";
+    public bool IsGenerating { get; set; } = false;
+
+    public List<string> QrFiles { get; set; } = new();
+
+    private async Task GenerateBatch()
+    {
+        if (string.IsNullOrWhiteSpace(Value))
+            return;
+
+        IsGenerating = true;
+        QrFiles.Clear();
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/Qr/GenerateBatch", Value);
+
+            if (response.IsSuccessStatusCode)
+            {
+                QrFiles = await response.Content.ReadFromJsonAsync<List<string>>();
+            }
+        }
+        catch
+        {
+            // Log if needed
+        }
+        finally
+        {
+            IsGenerating = false;
+        }
+    }
+}

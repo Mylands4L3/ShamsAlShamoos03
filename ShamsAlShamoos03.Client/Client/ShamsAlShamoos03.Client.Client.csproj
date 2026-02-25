@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.22" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.22" PrivateAssets="all" />
+		<PackageReference Include="Syncfusion.Blazor" Version="27.1.48" />
+	</ItemGroup>
+	<PropertyGroup>
+  <StaticWebAssetUseHash>true</StaticWebAssetUseHash>
+</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\ShamsAlShamoos03.Shared\ShamsAlShamoos03.Shared.csproj" />
+
+	</ItemGroup>
+ 
+
+</Project>
