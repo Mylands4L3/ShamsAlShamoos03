@@ -1,6 +1,0 @@
-@ShamsAlShamoos01.Server_HostAddress = http://localhost:5224
-
-GET {{ShamsAlShamoos01.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
