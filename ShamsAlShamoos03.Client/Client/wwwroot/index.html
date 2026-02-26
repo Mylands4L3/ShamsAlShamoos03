@@ -3,14 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>شمس الشموس  </title>
+    <title>شمس الشموس</title>
     <base href="/" />
-    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
 
- </head>
+    <!-- فایل CSS شخصی برای Hot Reload -->
+    <link href="css/site.css" rel="stylesheet" />
+
+    <link href="_content/Syncfusion.Blazor/styles/bootstrap5.css" rel="stylesheet" />
+
+</head>
 <body>
     <div id="app">
-        <!-- لودینگ اولیه -->
+        <!-- Loading اولیه -->
         <div class="text-center mt-5">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -18,7 +22,8 @@
         </div>
     </div>
 
-    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+ 
+    <!-- Blazor WASM -->
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
 </html>

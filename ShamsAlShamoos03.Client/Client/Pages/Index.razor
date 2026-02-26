@@ -1,48 +1,79 @@
 ﻿@page "/"
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Cards
+@using Syncfusion.Blazor.Navigations
 
-<MudContainer Class="mt-12">
+ 
+<div dir="rtl">
 
     <!-- Hero Section -->
-    <MudPaper Class="pa-8 text-center" Elevation="4">
-        <MudText Typo="Typo.h3" GutterBottom="true">
-            به سامانه شمس الشموس خوش آمدید
-        </MudText>
-
-        <MudText Typo="Typo.subtitle1" Class="mb-6">
-            سیستم مدیریت و ثبت اطلاعات سازمانی
-        </MudText>
-
-        <MudButton Variant="Variant.Filled" 
-                   Color="Color.Primary" 
-                   Size="Size.Large">
-            ورود به سیستم
-        </MudButton>
-    </MudPaper>
+    <div class="container text-center my-5">
+        <SfCard CssClass="e-shadow e-round">
+            <CardHeader>
+                <h1>خوش آمدید به شمس الشموس</h1>
+                <p>Landing Page حرفه‌ای با Syncfusion Blazor</p>
+            </CardHeader>
+            <CardContent>
+                <SfButton CssClass="e-primary e-flat" OnClick="()=>GoToFeatures()">شروع کنید</SfButton>
+            </CardContent>
+        </SfCard>
+    </div>
 
     <!-- Features Section -->
-    <MudGrid Class="mt-10">
+    <div class="container my-5">
+        <div class="row text-center">
+            <div class="col-md-4 mb-3">
+                <SfCard>
+                    <CardHeader>
+                        <h5>ویژگی اول</h5>
+                    </CardHeader>
+                    <CardContent>
+                        توضیح کوتاه ویژگی اول
+                    </CardContent>
+                </SfCard>
+            </div>
+            <div class="col-md-4 mb-3">
+                <SfCard>
+                    <CardHeader>
+                        <h5>ویژگی دوم</h5>
+                    </CardHeader>
+                    <CardContent>
+                        توضیح کوتاه ویژگی دوم
+                    </CardContent>
+                </SfCard>
+            </div>
+            <div class="col-md-4 mb-3">
+                <SfCard>
+                    <CardHeader>
+                        <h5>ویژگی سوم</h5>
+                    </CardHeader>
+                    <CardContent>
+                        توضیح کوتاه ویژگی سوم
+                    </CardContent>
+                </SfCard>
+            </div>
+        </div>
+    </div>
 
-        <MudItem xs="12" md="4">
-            <MudPaper Class="pa-6 text-center">
-                <MudText Typo="Typo.h6">مدیریت کاربران</MudText>
-                <MudText>ثبت و مدیریت اطلاعات کاربران سیستم</MudText>
-            </MudPaper>
-        </MudItem>
+    <!-- Call to Action -->
+    <div class="container text-center my-5">
+        <SfButton CssClass="e-success e-flat" OnClick="()=>GoToSignup()">ثبت نام کنید</SfButton>
+    </div>
 
-        <MudItem xs="12" md="4">
-            <MudPaper Class="pa-6 text-center">
-                <MudText Typo="Typo.h6">گزارش‌گیری</MudText>
-                <MudText>نمایش گزارش‌های دقیق و کاربردی</MudText>
-            </MudPaper>
-        </MudItem>
+</div>
+ 
+@code {
+    void GoToFeatures()
+    {
+        // مثال: اسکرول یا ناوبری به بخش Features
+    }
 
-        <MudItem xs="12" md="4">
-            <MudPaper Class="pa-6 text-center">
-                <MudText Typo="Typo.h6">امنیت بالا</MudText>
-                <MudText>احراز هویت و دسترسی سطح‌بندی شده</MudText>
-            </MudPaper>
-        </MudItem>
+    void GoToSignup()
+    {
+        // مثال: ناوبری به صفحه ثبت نام
+        NavigationManager.NavigateTo("/signup");
+    }
 
-    </MudGrid>
-
-</MudContainer>
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+}
