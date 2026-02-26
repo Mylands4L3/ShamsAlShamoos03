@@ -1,79 +1,37 @@
 ﻿@page "/"
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Cards
 @using Syncfusion.Blazor.Navigations
 
- 
-<div dir="rtl">
-
-    <!-- Hero Section -->
-    <div class="container text-center my-5">
-        <SfCard CssClass="e-shadow e-round">
-            <CardHeader>
-                <h1>خوش آمدید به شمس الشموس</h1>
-                <p>Landing Page حرفه‌ای با Syncfusion Blazor</p>
-            </CardHeader>
-            <CardContent>
-                <SfButton CssClass="e-primary e-flat" OnClick="()=>GoToFeatures()">شروع کنید</SfButton>
-            </CardContent>
-        </SfCard>
-    </div>
-
-    <!-- Features Section -->
-    <div class="container my-5">
-        <div class="row text-center">
-            <div class="col-md-4 mb-3">
-                <SfCard>
-                    <CardHeader>
-                        <h5>ویژگی اول</h5>
-                    </CardHeader>
-                    <CardContent>
-                        توضیح کوتاه ویژگی اول
-                    </CardContent>
-                </SfCard>
-            </div>
-            <div class="col-md-4 mb-3">
-                <SfCard>
-                    <CardHeader>
-                        <h5>ویژگی دوم</h5>
-                    </CardHeader>
-                    <CardContent>
-                        توضیح کوتاه ویژگی دوم
-                    </CardContent>
-                </SfCard>
-            </div>
-            <div class="col-md-4 mb-3">
-                <SfCard>
-                    <CardHeader>
-                        <h5>ویژگی سوم</h5>
-                    </CardHeader>
-                    <CardContent>
-                        توضیح کوتاه ویژگی سوم
-                    </CardContent>
-                </SfCard>
+<SfAppBar Color="Color.Primary" EnablePosition="true">
+    <AppBarContent>
+        <div class="d-flex justify-content-between align-items-center w-100 px-4">
+            <h3 class="text-white">Welcome to ShamsAlShamoos</h3>
+            <div>
+                <button class="btn btn-light me-2">Login</button>
+                <button class="btn btn-light">Sign Up</button>
             </div>
         </div>
+    </AppBarContent>
+</SfAppBar>
+
+<section class="landing-hero text-center py-5">
+    <h1 class="display-4">Build Amazing Blazor Apps with Syncfusion</h1>
+    <p class="lead">Fast, responsive and modern UI components for your app.</p>
+    <button class="btn btn-lg btn-primary">Get Started</button>
+</section>
+
+<section class="features container my-5">
+    <div class="row">
+        <div class="col-md-4">
+            <h5>Fast Performance</h5>
+            <p>Syncfusion components are optimized for speed.</p>
+        </div>
+        <div class="col-md-4">
+            <h5>Modern UI</h5>
+            <p>Beautiful & responsive components out-of-the-box.</p>
+        </div>
+        <div class="col-md-4">
+            <h5>Easy Integration</h5>
+            <p>Use with existing Blazor projects easily.</p>
+        </div>
     </div>
-
-    <!-- Call to Action -->
-    <div class="container text-center my-5">
-        <SfButton CssClass="e-success e-flat" OnClick="()=>GoToSignup()">ثبت نام کنید</SfButton>
-    </div>
-
-</div>
- 
-@code {
-    void GoToFeatures()
-    {
-        // مثال: اسکرول یا ناوبری به بخش Features
-    }
-
-    void GoToSignup()
-    {
-        // مثال: ناوبری به صفحه ثبت نام
-        NavigationManager.NavigateTo("/signup");
-    }
-
-    [Inject]
-    private NavigationManager NavigationManager { get; set; } = default!;
-}
+</section>
