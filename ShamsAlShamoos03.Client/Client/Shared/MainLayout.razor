@@ -1,15 +1,40 @@
 ﻿@inherits LayoutComponentBase
 @using MudBlazor
-<MudThemeProvider />
-<MudDialogProvider />
-<MudSnackbarProvider />
 
-<MudLayout>
-    <MudAppBar Elevation="1">
-        <MudText Typo="Typo.h6">Shams Al Shamoos</MudText>
-    </MudAppBar>
+<MudThemeProvider>
+    <MudDialogProvider>
+        <MudSnackbarProvider>
 
-    <MudMainContent>
-        @Body
-    </MudMainContent>
-</MudLayout>
+            <MudLayout>
+
+                <!-- Navbar کامل -->
+                <MudAppBar Elevation="4" Color="Color.Primary">
+                    <MudText Typo="Typo.h6">Shams Al Shamoos</MudText>
+                    <MudSpacer />
+                    <MudButton Variant="Variant.Text" Color="Color.Inherit" Href="/">صفحه اصلی</MudButton>
+                    <MudButton Variant="Variant.Text" Color="Color.Inherit" Href="/about">درباره ما</MudButton>
+                    <MudButton Variant="Variant.Text" Color="Color.Inherit" Href="/contact">تماس با ما</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" Href="/login">ورود</MudButton>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Href="/register">ثبت‌نام</MudButton>
+                </MudAppBar>
+
+                <!-- Body -->
+                <MudMainContent>
+                    @Body
+                </MudMainContent>
+
+                <!-- Footer حرفه‌ای -->
+                <MudFooter Elevation="4" Class="pa-6 mt-8 text-center" Color="Color.Primary">
+                    <MudText Typo="Typo.subtitle2" Class="text-white">
+                        © 2026 Shams Al Shamoos. همه حقوق محفوظ است.
+                    </MudText>
+                    <MudText Typo="Typo.caption" Class="text-white">
+                        توسعه یافته با MudBlazor و Blazor WebAssembly
+                    </MudText>
+                </MudFooter>
+
+            </MudLayout>
+
+        </MudSnackbarProvider>
+    </MudDialogProvider>
+</MudThemeProvider>
