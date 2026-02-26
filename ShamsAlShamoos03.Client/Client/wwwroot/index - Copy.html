@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>شمس الشموس - راهکارهای هوشمند تشخیص چهره و QR</title>
+    <base href="/" />
+
+    <!-- فونت‌ها و آیکون‌ها -->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet" />
+
+    <!-- فایل‌های CSS قالب Creative -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet" />
+    <link href="css/creative.css" rel="stylesheet" />
+
+    <!-- فایل‌های CSS پروژه -->
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="ShamsAlShamoos03.Client.Client.styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="app">
+        <!-- لودینگ اولیه -->
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        خطایی رخ داده است. <a href="" class="reload">بارگذاری مجدد</a>
+        <a class="dismiss">🗕</a>
+    </div>
+
+    <!-- کتابخانه‌های جاوااسکریپت قالب -->
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+    <!-- فایل‌های JS قالب -->
+    <script src="js/creative.js"></script>
+
+    <!-- اسکریپت مخصوص فعال‌سازی قالب بعد از لود Blazor -->
+    <script>
+        window.initializeTemplate = () => {
+            // فعال‌سازی اسکرول نرم
+            $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function () {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                        $('html, body').animate({
+                            scrollTop: (target.offset().top - 72)
+                        }, 1000, "easeInOutExpo");
+                        return false;
+                    }
+                }
+            });
+
+            // بستن منوی موبایل بعد از کلیک
+            $('.js-scroll-trigger').click(function () {
+                $('.navbar-collapse').collapse('hide');
+            });
+
+            // فعال‌سازی Magnific Popup
+            $('.popup-gallery').magnificPopup({
+                delegate: 'a',
+                type: 'image',
+                tLoading: 'Loading image #%curr%...',
+                mainClass: 'mfp-img-mobile',
+                gallery: {
+                    enabled: true,
+                    navigateByImgClick: true,
+                    preload: [0, 1]
+                },
+                image: {
+                    tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
+                }
+            });
+        };
+    </script>
+</body>
+</html>

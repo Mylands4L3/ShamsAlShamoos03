@@ -1,13 +1,14 @@
-using ShamsAlShamoos03.Client.Client;
-using ShamsAlShamoos03.Client.Services;
  using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor.Services;
+using ShamsAlShamoos03.Client.Client;
+using ShamsAlShamoos03.Client.Services;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 using System.Globalization;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 
 //فارسی کردن
 var culture = new CultureInfo("fa-IR");
@@ -25,7 +26,7 @@ SyncfusionLicenseProvider.RegisterLicense(licenseKey);
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
-
+builder.Services.AddMudServices();
 // رجیستر سرویس‌های خودت
 builder.Services.AddScoped<HistoryRegisterService>();
 

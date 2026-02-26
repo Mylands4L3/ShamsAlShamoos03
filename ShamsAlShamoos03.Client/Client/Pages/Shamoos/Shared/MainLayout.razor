@@ -1,28 +1,15 @@
 ﻿@inherits LayoutComponentBase
+@using MudBlazor
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-<div class="page rtl-layout d-flex flex-column min-vh-100">
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudText Typo="Typo.h6">Shams Al Shamoos</MudText>
+    </MudAppBar>
 
-    <NavMenu DesktopCollapsed="@desktopCollapsed"
-             DesktopCollapsedChanged="OnDesktopCollapsedChanged" />
-
-    <main class="flex-fill @(desktopCollapsed ? "collapsed-main" : "")">
-        <div class="mt-5 pt-3"></div>
-
-        <article class="content page-content">
-            @Body
-        </article>
-
-        <footer>
-            <p>&copy; @DateTime.Now.Year همه حقوق محفوظ است.</p>
-        </footer>
-    </main>
-</div>
-
-@code {
-    private bool desktopCollapsed = true;
-
-    private void OnDesktopCollapsedChanged(bool collapsed)
-    {
-        desktopCollapsed = collapsed;
-    }
-}
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>

@@ -1,0 +1,56 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@implements IDisposable
+
+<div class="landing-wrapper" dir="rtl">
+    @Body
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? Body { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await RunTemplateScripts();
+
+            // تنظیم وضعیت منو بر اساس اسکرول
+            await JSRuntime.InvokeVoidAsync("initializeNavbarScroll");
+        }
+    }
+
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        await InvokeAsync(StateHasChanged);
+        await RunTemplateScripts();
+
+        // اسکرول به بالای صفحه هنگام تغییر مسیر
+        await JSRuntime.InvokeVoidAsync("scrollToTop");
+    }
+
+    private async Task RunTemplateScripts()
+    {
+        try
+        {
+            // اجرای اسکریپت‌های مورد نیاز قالب
+            await JSRuntime.InvokeVoidAsync("initializeTemplate");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"خطا در اجرای اسکریپت‌های قالب: {ex.Message}");
+        }
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+}
