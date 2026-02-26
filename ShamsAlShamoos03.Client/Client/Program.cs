@@ -30,9 +30,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // HttpClient
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-// Syncfusion
-builder.Services.AddSyncfusionBlazor();
-
+ 
 // سایر سرویس‌های پروژه
  
 

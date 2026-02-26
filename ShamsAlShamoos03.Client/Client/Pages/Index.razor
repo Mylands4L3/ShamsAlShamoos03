@@ -1,37 +1,109 @@
 ﻿@page "/"
+@using Syncfusion.Blazor
 @using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Layouts
+@using Syncfusion.Blazor.Inputs
 
-<SfAppBar Color="Color.Primary" EnablePosition="true">
-    <AppBarContent>
-        <div class="d-flex justify-content-between align-items-center w-100 px-4">
-            <h3 class="text-white">Welcome to ShamsAlShamoos</h3>
+<!-- 🔴 NAVBAR -->
+     <SfAppBar CssClass="main-navbar">
+    <ChildContent>
+        <div class="container d-flex justify-content-between align-items-center">
+            <h4 class="text-white m-0">ShamsAlShamoos</h4>
             <div>
-                <button class="btn btn-light me-2">Login</button>
-                <button class="btn btn-light">Sign Up</button>
+                <SfButton CssClass="e-flat text-white">Features</SfButton>
+                <SfButton CssClass="e-flat text-white">Pricing</SfButton>
+                <SfButton CssClass="e-flat text-white">Contact</SfButton>
             </div>
         </div>
-    </AppBarContent>
+    </ChildContent>
 </SfAppBar>
 
-<section class="landing-hero text-center py-5">
-    <h1 class="display-4">Build Amazing Blazor Apps with Syncfusion</h1>
-    <p class="lead">Fast, responsive and modern UI components for your app.</p>
-    <button class="btn btn-lg btn-primary">Get Started</button>
+<!-- 🔴 HERO -->
+<section class="hero-section text-center text-white">
+    <div class="container">
+        <h1 class="display-3 fw-bold">Build Smarter Solutions</h1>
+        <p class="lead mt-3">
+            Powerful Blazor WebAssembly platform powered by Syncfusion UI.
+        </p>
+        <SfButton CssClass="e-primary e-large mt-4">
+            Get Started
+        </SfButton>
+    </div>
 </section>
 
-<section class="features container my-5">
+<!-- 🔴 FEATURES -->
+<section class="container py-5 text-center">
+    <h2 class="mb-5">Features</h2>
     <div class="row">
         <div class="col-md-4">
-            <h5>Fast Performance</h5>
-            <p>Syncfusion components are optimized for speed.</p>
+            <h5>High Performance</h5>
+            <p>Optimized WebAssembly execution with minimal load time.</p>
         </div>
         <div class="col-md-4">
             <h5>Modern UI</h5>
-            <p>Beautiful & responsive components out-of-the-box.</p>
+            <p>Powered by Syncfusion professional components.</p>
         </div>
         <div class="col-md-4">
-            <h5>Easy Integration</h5>
-            <p>Use with existing Blazor projects easily.</p>
+            <h5>Scalable Architecture</h5>
+            <p>Clean architecture with Hosted Blazor model.</p>
+        </div>
+    </div>
+</section>
+
+<!-- 🔴 PRICING -->
+<section class="pricing-section py-5 text-center">
+    <div class="container">
+        <h2 class="mb-5">Pricing</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="pricing-card">
+                    <h4>Basic</h4>
+                    <h2>$19</h2>
+                    <p>Essential features</p>
+                    <SfButton CssClass="e-outline">Choose</SfButton>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="pricing-card popular">
+                    <h4>Pro</h4>
+                    <h2>$49</h2>
+                    <p>Advanced features</p>
+                    <SfButton CssClass="e-primary">Choose</SfButton>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="pricing-card">
+                    <h4>Enterprise</h4>
+                    <h2>$99</h2>
+                    <p>All features included</p>
+                    <SfButton CssClass="e-outline">Choose</SfButton>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 🔴 TESTIMONIALS -->
+<section class="container py-5 text-center">
+    <h2 class="mb-5">Testimonials</h2>
+    <p>"This platform completely transformed our workflow!"</p>
+    <p class="fw-bold">- Happy Client</p>
+</section>
+
+<!-- 🔴 CONTACT -->
+<section class="contact-section py-5 text-white">
+    <div class="container">
+        <h2 class="text-center mb-4">Contact Us</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <SfTextBox Placeholder="Your Name" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                <SfTextBox Placeholder="Email" CssClass="mt-3" FloatLabelType="FloatLabelType.Auto"></SfTextBox>
+                <SfTextBox Placeholder="Message" CssClass="mt-3" Multiline="true"></SfTextBox>
+                <SfButton CssClass="e-primary e-block mt-3">
+                    Send Message
+                </SfButton>
+            </div>
         </div>
     </div>
 </section>

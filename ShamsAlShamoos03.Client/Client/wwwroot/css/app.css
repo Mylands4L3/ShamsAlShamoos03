@@ -7,6 +7,47 @@
     display: none;
 }
 
+
+
+
+
+
+
+
+.main-navbar {
+    background-color: #c40000 !important;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #c40000, #ff3b3b);
+    padding: 120px 0;
+}
+
+.pricing-section {
+    background-color: #f8f9fa;
+}
+
+.pricing-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+    .pricing-card.popular {
+        border: 2px solid #c40000;
+    }
+
+.contact-section {
+    background: #c40000;
+    padding: 80px 0;
+}
+
+
+
 @font-face {
     font-family: 'B Mitra';
     src: url('../fonts/B Mitra_0.ttf') format('truetype');
